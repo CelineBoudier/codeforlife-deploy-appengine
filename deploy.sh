@@ -3,7 +3,7 @@
 export CLOUDSDK_CORE_DISABLE_PROMPTS=1
 export CLOUDSDK_PYTHON_SITEPACKAGES=1
 
-GCLOUD=${SNAP_CACHE_DIR}/google-cloud-sdk/bin/gcloud
+GCLOUD=$SEMAPHORE_CACHE_DIR/google-cloud-sdk/bin/gcloud
 
 if [ ! -x ${GCLOUD} ]; then
     wget https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-91.0.1-linux-x86_64.tar.gz
@@ -22,7 +22,7 @@ export CACHE_PREFIX="${MODULE_NAME}-${VERSION}-"
 
 ./manage.py migrate --noinput
 
-envsubst <app.yaml.tmpl >app.yaml
+envsubst '${MODULE_NAME}' <app.yaml.tmpl >app.yaml
 
 ${GCLOUD} app --quiet deploy app.yaml --project ${APP_ID} --version ${VERSION} --no-promote
 ${GCLOUD} app --quiet deploy cron.yaml --project ${APP_ID} --version ${VERSION} --no-promote
